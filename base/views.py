@@ -61,6 +61,23 @@ def getRwandaLocations(request):
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCategories(request):
+    """
+    Retrieves all Category records, ordered by newest first.
+    Returns a detailed response with the number of categories retrieved.
+    """
+    categories = Category.objects.all().order_by('-id')
+    serializer = CategorySerializer(categories, many=True)
+    return Response(
+        {
+            "detail": f"Successfully retrieved {len(serializer.data)} categories.",
+            "data": serializer.data
+        },
+        status=status.HTTP_200_OK
+    )
+
 # --------------------------
 # Place CRUD Endpoints
 # --------------------------
