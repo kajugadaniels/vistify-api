@@ -9,8 +9,8 @@ urlpatterns = [
     path('rwanda-locations/', getRwandaLocations, name='getRwandaLocations'),
 
     path('places/', getPlaces, name='getPlaces'),
-    path('places/add/', addPlace, name='addPlace'),
-    path('places/<int:pk>/', placeDetails, name='placeDetails'),
-    path('places/<int:pk>/edit/', editPlace, name='editPlace'),
-    path('places/<int:pk>/delete/', deletePlace, name='deletePlace'),
+    path('place/add/', addPlace, name='addPlace'),
+    path('place/<int:pk>/', placeDetails, name='placeDetails'),
+    path('place/<int:pk>/edit/', editPlace, name='editPlace'),
+    path('place/<int:pk>/delete/', deletePlace, name='deletePlace'),
 ]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
