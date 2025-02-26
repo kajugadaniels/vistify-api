@@ -180,3 +180,16 @@ def placeSocialMediaDetails(request, pk):
         return Response({"detail": "PlaceSocialMedia not found."}, status=status.HTTP_404_NOT_FOUND)
     serializer = PlaceSocialMediaSerializer(social)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['PUT', 'PATCH'])
+@permission_classes([IsAuthenticated])
+def editPlaceSocialMedia(request, pk):
+    try:
+        social = PlaceSocialMedia.objects.get(pk=pk)
+    except PlaceSocialMedia.DoesNotExist:
+        return Response({"detail": "PlaceSocialMedia not found."}, status=status.HTTP_404_NOT_FOUND)
+    serializer = PlaceSocialMediaSerializer(social, data=request.data, partial=(request.method=='PATCH'))
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
