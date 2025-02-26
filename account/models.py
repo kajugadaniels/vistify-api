@@ -1,7 +1,7 @@
 import os
 import random
 from django.db import models
-from account.managers import CustomUserManager
+from account.managers import *
 from django.utils import timezone
 from django.utils.text import slugify
 from imagekit.processors import ResizeToFill
