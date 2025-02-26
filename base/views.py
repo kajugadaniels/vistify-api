@@ -41,9 +41,6 @@ def getRwandaLocations(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getPlaces(request):
-    """
-    Retrieve a list of all Places with nested images and social medias.
-    """
     places = Place.objects.all()
     serializer = PlaceSerializer(places, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
@@ -51,9 +48,6 @@ def getPlaces(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def addPlace(request):
-    """
-    Create a new Place with optional nested images and social medias.
-    """
     serializer = PlaceSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -63,9 +57,6 @@ def addPlace(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def placeDetails(request, pk):
-    """
-    Retrieve detailed information for a specific Place.
-    """
     try:
         place = Place.objects.get(pk=pk)
     except Place.DoesNotExist:
@@ -76,9 +67,6 @@ def placeDetails(request, pk):
 @api_view(['PUT', 'PATCH'])
 @permission_classes([IsAuthenticated])
 def editPlace(request, pk):
-    """
-    Update an existing Place along with its nested images and social medias.
-    """
     try:
         place = Place.objects.get(pk=pk)
     except Place.DoesNotExist:
@@ -92,9 +80,6 @@ def editPlace(request, pk):
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def deletePlace(request, pk):
-    """
-    Delete a Place (along with its nested images and social medias).
-    """
     try:
         place = Place.objects.get(pk=pk)
     except Place.DoesNotExist:
