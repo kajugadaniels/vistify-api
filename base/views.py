@@ -101,3 +101,10 @@ def deletePlace(request, pk):
         return Response({'detail': 'Place not found.'}, status=status.HTTP_404_NOT_FOUND)
     place.delete()
     return Response({'detail': 'Place deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getPlaceImages(request, place_id):
+    images = PlaceImage.objects.filter(place__id=place_id)
+    serializer = PlaceImageSerializer(images, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
