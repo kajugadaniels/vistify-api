@@ -59,3 +59,16 @@ def addPlace(request):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def placeDetails(request, pk):
+    """
+    Retrieve detailed information for a specific Place.
+    """
+    try:
+        place = Place.objects.get(pk=pk)
+    except Place.DoesNotExist:
+        return Response({'detail': 'Place not found.'}, status=status.HTTP_404_NOT_FOUND)
+    serializer = PlaceSerializer(place)
+    return Response(serializer.data, status=status.HTTP_200_OK)
