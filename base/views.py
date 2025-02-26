@@ -68,13 +68,14 @@ def getRwandaLocations(request):
 @permission_classes([IsAuthenticated])
 def getPlaces(request):
     """
-    Retrieves all Place records.
+    Retrieves all Place records with detailed information for category, tags,
+    place images, and social media records.
     """
     places = Place.objects.all().order_by('-id')
     serializer = PlaceSerializer(places, many=True)
     return Response(
         {
-            "detail": f"Successfully retrieved {len(serializer.data)} places.",
+            "detail": f"Successfully retrieved {len(serializer.data)} places with detailed info.",
             "data": serializer.data
         },
         status=status.HTTP_200_OK
