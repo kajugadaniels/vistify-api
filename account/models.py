@@ -1,12 +1,12 @@
 import os
 import random
 from django.db import models
-from account.managers import *
+from account.managers import CustomUserManager
 from django.utils import timezone
 from django.utils.text import slugify
 from imagekit.processors import ResizeToFill
 from imagekit.models import ProcessedImageField
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, Permission
 
 def user_image_path(instance, filename):
     base_filename, file_extension = os.path.splitext(filename)
@@ -37,6 +37,18 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'phone_number']
+
+    # Custom related names to prevent clashes with auth models
+    groups = models.ManyToManyField(
+        'auth.Group', 
+        related_name='account_user_set',
+        blank=True
+    )
+    user_permissions = models.ManyToManyField(
+        Permission, 
+        related_name='account_user_permissions',
+        blank=True
+    )
 
     def generate_username(self):
         """Generate a unique username based on the name and a random 4-digit number."""
