@@ -59,3 +59,20 @@ class PlaceImageSerializer(serializers.ModelSerializer):
         model = PlaceImage
         fields = ['id', 'place', 'image', 'caption', 'created_at']
         read_only_fields = ['id', 'created_at']
+
+class PlaceSocialMediaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PlaceSocialMedia
+        fields = [
+            'id',
+            'place',
+            'phone_number',
+            'email',
+            'instagram',
+            'tiktok',
+            'twitter',
+            'website',
+            'facebook',
+            'whatsapp'
+        ]
+        read_only_fields = ['id']
