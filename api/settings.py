@@ -143,6 +143,9 @@ WHITENOISE_AUTOREFRESH = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+CORS_ALLOW_ALL_ORIGINS = True
+APPEND_SLASH = False
+
 # Add this to your REST_FRAMEWORK settings in settings.py
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
