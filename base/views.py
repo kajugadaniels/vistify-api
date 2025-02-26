@@ -142,3 +142,13 @@ def editPlaceImage(request, pk):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deletePlaceImage(request, pk):
+    try:
+        image = PlaceImage.objects.get(pk=pk)
+    except PlaceImage.DoesNotExist:
+        return Response({"detail": "PlaceImage not found."}, status=status.HTTP_404_NOT_FOUND)
+    image.delete()
+    return Response({"detail": "PlaceImage deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
