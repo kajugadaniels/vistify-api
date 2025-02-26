@@ -3,6 +3,7 @@ import random
 from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
+from django.utils.html import format_html
 from imagekit.processors import ResizeToFill
 from imagekit.models import ProcessedImageField
 from django.core.validators import RegexValidator, URLValidator, EmailValidator
@@ -11,6 +12,12 @@ def category_image_path(instance, filename):
     base_filename, file_extension = os.path.splitext(filename)
     timestamp = timezone.now().strftime("%Y%m%d%H%M%S")
     return f'categories/category_{slugify(instance.name)}_{timestamp}{file_extension}'
+
+def place_image_path(instance, filename):
+    base_filename, file_extension = os.path.splitext(filename)
+    place_slug = slugify(instance.caption if instance.caption else instance.place.name)
+    timestamp = timezone.now().strftime("%Y%m%d%H%M%S")
+    return f'places/place_{place_slug}_{timestamp}{file_extension}'
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -104,3 +111,25 @@ class Place(models.Model):
 
     class Meta:
         verbose_name_plural = "Places"
+
+class PlaceImage(models.Model):
+    place = models.ForeignKey(Place, on_delete=models.CASCADE, related_name="images")
+    image = ProcessedImageField(
+        upload_to=place_image_path,
+        processors=[ResizeToFill(1080, 600)],
+        options={'quality': 90},
+        null=True,
+        blank=True,
+    )
+    caption = models.CharField(max_length=255, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def image_preview(self):
+        """Display a thumbnail of the place image in the list view."""
+        if self.image:
+            return format_html('<img src="{}" width="50" height="50" />', self.image.url)
+        return "No image"
+    image_preview.short_description = "Image Preview"
+
+    def __str__(self):
+        return f"{self.place.name} Image" if self.place else "Place Image"
