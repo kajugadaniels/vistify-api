@@ -192,6 +192,24 @@ def deleteCategory(request, pk):
     )
 
 # --------------------------
+# Tag CRUD Endpoints
+# --------------------------
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getTags(request):
+    """
+    Retrieves all Tag records, ordered by newest first.
+    Returns a detailed response with the count of tags retrieved.
+    """
+    tags = Tag.objects.all().order_by('-id')
+    serializer = TagSerializer(tags, many=True)
+    response_data = {
+        "detail": f"Successfully retrieved {len(serializer.data)} tags.",
+        "data": serializer.data
+    }
+    return Response(response_data, status=status.HTTP_200_OK)
+
+# --------------------------
 # Place CRUD Endpoints
 # --------------------------
 @api_view(['GET'])
