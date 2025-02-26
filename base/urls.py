@@ -25,4 +25,10 @@ urlpatterns = [
     path('social/<int:pk>/', placeSocialMediaDetails, name='placeSocialMediaDetails'),
     path('social/<int:pk>/edit/', editPlaceSocialMedia, name='editPlaceSocialMedia'),
     path('social/<int:pk>/delete/', deletePlaceSocialMedia, name='deletePlaceSocialMedia'),
+
+    path('categories/', getCategories, name='getCategories'),
+    path('category/add/', addCategory, name='addCategory'),
+    path('category/<int:pk>/', categoryDetails, name='categoryDetails'),
+    path('category/<int:pk>/edit/', editCategory, name='editCategory'),
+    path('category/<int:pk>/delete/', deleteCategory, name='deleteCategory'),
 ]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
