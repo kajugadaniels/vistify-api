@@ -119,3 +119,13 @@ def addPlaceImage(request, place_id):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def placeImageDetails(request, pk):
+    try:
+        image = PlaceImage.objects.get(pk=pk)
+    except PlaceImage.DoesNotExist:
+        return Response({"detail": "PlaceImage not found."}, status=status.HTTP_404_NOT_FOUND)
+    serializer = PlaceImageSerializer(image)
+    return Response(serializer.data, status=status.HTTP_200_OK)
