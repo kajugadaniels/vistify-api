@@ -2,6 +2,7 @@ import requests
 from base.serializers import *
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 
 @api_view(['GET'])
@@ -36,3 +37,13 @@ def getRwandaLocations(request):
             {"detail": str(e)},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getPlaces(request):
+    """
+    Retrieve a list of all Places with nested images and social medias.
+    """
+    places = Place.objects.all()
+    serializer = PlaceSerializer(places, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
