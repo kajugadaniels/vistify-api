@@ -132,6 +132,40 @@ def categoryDetails(request, pk):
         status=status.HTTP_200_OK
     )
 
+@api_view(['PUT', 'PATCH'])
+@permission_classes([IsAuthenticated])
+def editCategory(request, pk):
+    """
+    Updates an existing Category record with the provided data.
+    Returns a detailed success message with updated category data or detailed error information if the update fails.
+    """
+    try:
+        category = Category.objects.get(pk=pk)
+    except Category.DoesNotExist:
+        return Response(
+            {
+                "detail": f"Category with id {pk} not found for update."
+            },
+            status=status.HTTP_404_NOT_FOUND
+        )
+    serializer = CategorySerializer(category, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(
+            {
+                "detail": "Category updated successfully.",
+                "data": serializer.data
+            },
+            status=status.HTTP_200_OK
+        )
+    return Response(
+        {
+            "detail": "Failed to update category. Please review the errors.",
+            "errors": serializer.errors
+        },
+        status=status.HTTP_400_BAD_REQUEST
+    )
+
 # --------------------------
 # Place CRUD Endpoints
 # --------------------------
