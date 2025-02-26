@@ -108,3 +108,14 @@ def getPlaceImages(request, place_id):
     images = PlaceImage.objects.filter(place__id=place_id)
     serializer = PlaceImageSerializer(images, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def addPlaceImage(request, place_id):
+    data = request.data.copy()
+    data['place'] = place_id
+    serializer = PlaceImageSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
