@@ -72,3 +72,19 @@ def placeDetails(request, pk):
         return Response({'detail': 'Place not found.'}, status=status.HTTP_404_NOT_FOUND)
     serializer = PlaceSerializer(place)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['PUT', 'PATCH'])
+@permission_classes([IsAuthenticated])
+def editPlace(request, pk):
+    """
+    Update an existing Place along with its nested images and social medias.
+    """
+    try:
+        place = Place.objects.get(pk=pk)
+    except Place.DoesNotExist:
+        return Response({'detail': 'Place not found.'}, status=status.HTTP_404_NOT_FOUND)
+    serializer = PlaceSerializer(place, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
