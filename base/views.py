@@ -61,6 +61,10 @@ def getRwandaLocations(request):
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
+# --------------------------
+# Category CRUD Endpoints
+# --------------------------
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getCategories(request):
@@ -76,6 +80,31 @@ def getCategories(request):
             "data": serializer.data
         },
         status=status.HTTP_200_OK
+    )
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def addCategory(request):
+    """
+    Creates a new Category record using the provided data.
+    Returns a detailed success message with the created category data or error details if creation fails.
+    """
+    serializer = CategorySerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(
+            {
+                "detail": "Category created successfully.",
+                "data": serializer.data
+            },
+            status=status.HTTP_201_CREATED
+        )
+    return Response(
+        {
+            "detail": "Failed to create category. Please review the input data.",
+            "errors": serializer.errors
+        },
+        status=status.HTTP_400_BAD_REQUEST
     )
 
 # --------------------------
