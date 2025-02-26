@@ -152,3 +152,10 @@ def deletePlaceImage(request, pk):
         return Response({"detail": "PlaceImage not found."}, status=status.HTTP_404_NOT_FOUND)
     image.delete()
     return Response({"detail": "PlaceImage deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getPlaceSocialMedias(request, place_id):
+    socials = PlaceSocialMedia.objects.filter(place__id=place_id)
+    serializer = PlaceSocialMediaSerializer(socials, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
