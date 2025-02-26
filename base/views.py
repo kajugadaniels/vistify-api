@@ -170,3 +170,13 @@ def addPlaceSocialMedia(request, place_id):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def placeSocialMediaDetails(request, pk):
+    try:
+        social = PlaceSocialMedia.objects.get(pk=pk)
+    except PlaceSocialMedia.DoesNotExist:
+        return Response({"detail": "PlaceSocialMedia not found."}, status=status.HTTP_404_NOT_FOUND)
+    serializer = PlaceSocialMediaSerializer(social)
+    return Response(serializer.data, status=status.HTTP_200_OK)
