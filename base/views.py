@@ -231,6 +231,28 @@ def addTag(request):
         }
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def tagDetails(request, pk):
+    """
+    Retrieves detailed information for a specific Tag identified by its primary key.
+    Returns a detailed success message with the tag data or an error if not found.
+    """
+    try:
+        tag = Tag.objects.get(pk=pk)
+    except Tag.DoesNotExist:
+        response_data = {
+            "detail": f"Tag with id {pk} not found. Please verify the provided identifier."
+        }
+        return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+    
+    serializer = TagSerializer(tag)
+    response_data = {
+        "detail": "Successfully retrieved tag details.",
+        "data": serializer.data
+    }
+    return Response(response_data, status=status.HTTP_200_OK)
+
 # --------------------------
 # Place CRUD Endpoints
 # --------------------------
