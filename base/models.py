@@ -133,3 +133,21 @@ class PlaceImage(models.Model):
 
     def __str__(self):
         return f"{self.place.name} Image" if self.place else "Place Image"
+
+class PlaceSocialMedia(models.Model):
+    place = models.OneToOneField(
+        'Place', 
+        on_delete=models.CASCADE, 
+        related_name='social_media'
+    )
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    instagram = models.CharField(max_length=255, blank=True, null=True)
+    tiktok = models.CharField(max_length=255, blank=True, null=True)
+    twitter = models.CharField(max_length=255, blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
+    facebook = models.CharField(max_length=255, blank=True, null=True)
+    whatsapp = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return f"Social Media for {self.place.name}" if self.place else "Place Social Media"
