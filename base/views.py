@@ -253,6 +253,26 @@ def tagDetails(request, pk):
     }
     return Response(response_data, status=status.HTTP_200_OK)
 
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteTag(request, pk):
+    """
+    Deletes a specific Tag record identified by its primary key.
+    Returns a detailed confirmation message if deletion is successful, or an error if the tag is not found.
+    """
+    try:
+        tag = Tag.objects.get(pk=pk)
+    except Tag.DoesNotExist:
+        response_data = {
+            "detail": f"Tag with id {pk} not found. Deletion aborted."
+        }
+        return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+    
+    tag.delete()
+    response_data = {
+        "detail": f"Tag with id {pk} has been deleted successfully."
+    }
+
 # --------------------------
 # Place CRUD Endpoints
 # --------------------------
