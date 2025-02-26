@@ -47,3 +47,15 @@ def getPlaces(request):
     places = Place.objects.all()
     serializer = PlaceSerializer(places, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def addPlace(request):
+    """
+    Create a new Place with optional nested images and social medias.
+    """
+    serializer = PlaceSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
