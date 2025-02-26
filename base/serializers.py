@@ -53,3 +53,9 @@ class PlaceSerializer(serializers.ModelSerializer):
             'updated_at'
         ]
         read_only_fields = ['slug', 'views', 'created_at', 'updated_at']
+
+class PlaceImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PlaceImage
+        fields = ['id', 'place', 'image', 'caption', 'created_at']
+        read_only_fields = ['id', 'created_at']
