@@ -166,6 +166,31 @@ def editCategory(request, pk):
         status=status.HTTP_400_BAD_REQUEST
     )
 
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deleteCategory(request, pk):
+    """
+    Deletes a specific Category record identified by its primary key.
+    Returns a detailed confirmation message if deletion is successful, or an error if the category is not found.
+    """
+    try:
+        category = Category.objects.get(pk=pk)
+    except Category.DoesNotExist:
+        return Response(
+            {
+                "detail": f"Category with id {pk} not found. Deletion aborted."
+            },
+            status=status.HTTP_404_NOT_FOUND
+        )
+    category.delete()
+    return Response(
+        {
+            "detail": f"Category with id {pk} has been deleted successfully."
+        },
+        status=status.HTTP_204_NO_CONTENT
+    )
+
 # --------------------------
 # Place CRUD Endpoints
 # --------------------------
