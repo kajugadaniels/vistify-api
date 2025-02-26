@@ -88,3 +88,16 @@ def editPlace(request, pk):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deletePlace(request, pk):
+    """
+    Delete a Place (along with its nested images and social medias).
+    """
+    try:
+        place = Place.objects.get(pk=pk)
+    except Place.DoesNotExist:
+        return Response({'detail': 'Place not found.'}, status=status.HTTP_404_NOT_FOUND)
+    place.delete()
+    return Response({'detail': 'Place deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
