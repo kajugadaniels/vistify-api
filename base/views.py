@@ -129,3 +129,16 @@ def placeImageDetails(request, pk):
         return Response({"detail": "PlaceImage not found."}, status=status.HTTP_404_NOT_FOUND)
     serializer = PlaceImageSerializer(image)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['PUT', 'PATCH'])
+@permission_classes([IsAuthenticated])
+def editPlaceImage(request, pk):
+    try:
+        image = PlaceImage.objects.get(pk=pk)
+    except PlaceImage.DoesNotExist:
+        return Response({"detail": "PlaceImage not found."}, status=status.HTTP_404_NOT_FOUND)
+    serializer = PlaceImageSerializer(image, data=request.data, partial=(request.method=='PATCH'))
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
