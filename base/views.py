@@ -107,6 +107,31 @@ def addCategory(request):
         status=status.HTTP_400_BAD_REQUEST
     )
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def categoryDetails(request, pk):
+    """
+    Retrieves detailed information for a specific Category identified by its primary key.
+    Returns a comprehensive response with the category data or an error if not found.
+    """
+    try:
+        category = Category.objects.get(pk=pk)
+    except Category.DoesNotExist:
+        return Response(
+            {
+                "detail": f"Category with id {pk} not found. Please verify the provided identifier."
+            },
+            status=status.HTTP_404_NOT_FOUND
+        )
+    serializer = CategorySerializer(category)
+    return Response(
+        {
+            "detail": "Successfully retrieved category details.",
+            "data": serializer.data
+        },
+        status=status.HTTP_200_OK
+    )
+
 # --------------------------
 # Place CRUD Endpoints
 # --------------------------
