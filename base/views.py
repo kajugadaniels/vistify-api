@@ -209,6 +209,28 @@ def getTags(request):
     }
     return Response(response_data, status=status.HTTP_200_OK)
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def addTag(request):
+    """
+    Creates a new Tag record using the provided data.
+    Returns a detailed success message with the created tag data or error details if creation fails.
+    """
+    serializer = TagSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        response_data = {
+            "detail": "Tag created successfully.",
+            "data": serializer.data
+        }
+        return Response(response_data, status=status.HTTP_201_CREATED)
+    else:
+        response_data = {
+            "detail": "Failed to create tag. Please review the input data.",
+            "errors": serializer.errors
+        }
+        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+
 # --------------------------
 # Place CRUD Endpoints
 # --------------------------
