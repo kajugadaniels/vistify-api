@@ -109,3 +109,28 @@ def getPlaces(request):
         },
         status=status.HTTP_200_OK
     )
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def placeDetails(request, pk):
+    """
+    Retrieves detailed information for a specific Place along with its nested 
+    category, tags, images, and social media records.
+    """
+    try:
+        place = Place.objects.get(pk=pk)
+    except Place.DoesNotExist:
+        return Response(
+            {
+                "detail": f"Place with id {pk} not found. Please verify the provided identifier."
+            },
+            status=status.HTTP_404_NOT_FOUND
+        )
+    serializer = PlaceSerializer(place)
+    return Response(
+        {
+            "detail": "Successfully retrieved comprehensive details for the selected Place.",
+            "data": serializer.data
+        },
+        status=status.HTTP_200_OK
+    )
