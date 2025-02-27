@@ -33,9 +33,9 @@ urlpatterns = [
     path('category/<int:pk>/delete/', deleteCategory, name='deleteCategory'),
     
     path('tags/', getTags, name='getTags'),
-    path('tags/add/', addTag, name='addTag'),
-    path('tags/<int:pk>/', tagDetails, name='tagDetails'),
-    path('tags/<int:pk>/edit/', editTag, name='editTag'),
-    path('tags/<int:pk>/delete/', deleteTag, name='deleteTag'),
+    path('tag/add/', addTag, name='addTag'),
+    path('tag/<int:pk>/', tagDetails, name='tagDetails'),
+    path('tag/<int:pk>/edit/', editTag, name='editTag'),
+    path('tag/<int:pk>/delete/', deleteTag, name='deleteTag'),
 
 ]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

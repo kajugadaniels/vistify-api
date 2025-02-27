@@ -289,6 +289,7 @@ def deleteTag(request, pk):
     """
     Deletes a specific Tag record identified by its primary key.
     Returns a detailed confirmation message if deletion is successful, or an error if the tag is not found.
+    Note: We return a 200 OK status with a JSON body to ensure a Response object is always returned.
     """
     try:
         tag = Tag.objects.get(pk=pk)
@@ -302,6 +303,7 @@ def deleteTag(request, pk):
     response_data = {
         "detail": f"Tag with id {pk} has been deleted successfully."
     }
+    return Response(response_data, status=status.HTTP_200_OK)
 
 # --------------------------
 # Place CRUD Endpoints
