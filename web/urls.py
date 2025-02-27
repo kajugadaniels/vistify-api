@@ -7,4 +7,6 @@ app_name = 'web'
 
 urlpatterns = [
     path('rwanda-locations/', getRwandaLocations, name='getRwandaLocations'),
+
+    path('categories/', getCategories, name='getCategories'),
 ]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
