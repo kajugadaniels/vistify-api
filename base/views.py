@@ -253,6 +253,36 @@ def tagDetails(request, pk):
     }
     return Response(response_data, status=status.HTTP_200_OK)
 
+@api_view(['PUT', 'PATCH'])
+@permission_classes([IsAuthenticated])
+def editTag(request, pk):
+    """
+    Updates an existing Tag record with the provided data.
+    Returns a detailed success message with updated tag data or detailed error information if the update fails.
+    """
+    try:
+        tag = Tag.objects.get(pk=pk)
+    except Tag.DoesNotExist:
+        response_data = {
+            "detail": f"Tag with id {pk} not found for update."
+        }
+        return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+    
+    serializer = TagSerializer(tag, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        response_data = {
+            "detail": "Tag updated successfully.",
+            "data": serializer.data
+        }
+        return Response(response_data, status=status.HTTP_200_OK)
+    else:
+        response_data = {
+            "detail": "Failed to update tag. Please review the errors.",
+            "errors": serializer.errors
+        }
+        return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def deleteTag(request, pk):
