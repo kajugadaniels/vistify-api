@@ -11,4 +11,6 @@ urlpatterns = [
     path('categories/', getCategories, name='getCategories'),
     
     path('tags/', getTags, name='getTags'),
+
+    path('places/', getPlaces, name='getPlaces'),
 ]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

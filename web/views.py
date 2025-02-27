@@ -92,3 +92,20 @@ def getTags(request):
         "data": serializer.data
     }
     return Response(response_data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def getPlaces(request):
+    """
+    Retrieves all Place records with detailed information for category, tags,
+    place images, and social media records.
+    """
+    places = Place.objects.all().order_by('-id')
+    serializer = PlaceSerializer(places, many=True)
+    return Response(
+        {
+            "detail": f"Successfully retrieved {len(serializer.data)} places with detailed info.",
+            "data": serializer.data
+        },
+        status=status.HTTP_200_OK
+    )
