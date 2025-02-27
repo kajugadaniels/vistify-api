@@ -6,8 +6,6 @@ from django.conf.urls.static import static
 app_name = 'base'
 
 urlpatterns = [
-    path('rwanda-locations/', getRwandaLocations, name='getRwandaLocations'),
-
     path('places/', getPlaces, name='getPlaces'),
     path('place/add/', addPlace, name='addPlace'),
     path('place/<int:pk>/', placeDetails, name='placeDetails'),
