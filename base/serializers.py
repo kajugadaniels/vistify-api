@@ -50,12 +50,20 @@ class PlaceSocialMediaSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['id']
 
-# Updated Place serializer with nested detailed information
 class PlaceSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(read_only=True)
-    tags = TagSerializer(read_only=True, many=True)
+    # Nested read-only representations for response
+    category_detail = CategorySerializer(source='category', read_only=True)
+    tags_detail = TagSerializer(source='tags', many=True, read_only=True)
     images = PlaceImageSerializer(read_only=True, many=True)
     social_medias = PlaceSocialMediaSerializer(read_only=True, many=True)
+    
+    # Writeable fields for creating/updating a Place
+    category = serializers.PrimaryKeyRelatedField(
+        queryset=Category.objects.all(), write_only=True, required=False
+    )
+    tags = serializers.PrimaryKeyRelatedField(
+        queryset=Tag.objects.all(), many=True, write_only=True, required=False
+    )
     
     class Meta:
         model = Place
@@ -65,7 +73,9 @@ class PlaceSerializer(serializers.ModelSerializer):
             'slug',
             'description',
             'category',
+            'category_detail',
             'tags',
+            'tags_detail',
             'province',
             'district',
             'sector',
@@ -81,3 +91,18 @@ class PlaceSerializer(serializers.ModelSerializer):
             'social_medias',
         ]
         read_only_fields = ['slug', 'views', 'created_at', 'updated_at']
+    
+    def create(self, validated_data):
+        # Extract writable fields
+        category = validated_data.pop('category', None)
+        tags = validated_data.pop('tags', [])
+        # Create the Place object without category and tags first
+        place = Place.objects.create(**validated_data)
+        # Set the category if provided
+        if category:
+            place.category = category
+        place.save()
+        # Associate tags if provided
+        if tags:
+            place.tags.set(tags)
+        return place
