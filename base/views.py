@@ -672,3 +672,25 @@ def addPlaceMenuItem(request, place_id):
         },
         status=status.HTTP_400_BAD_REQUEST
     )
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def menuItemDetails(request, pk):
+    """
+    Retrieve details for a specific menu item.
+    """
+    try:
+        menu_item = PlaceMenu.objects.get(pk=pk)
+        serializer = PlaceMenuSerializer(menu_item)
+        return Response(
+            {
+                "detail": "Successfully retrieved menu item details.",
+                "data": serializer.data
+            },
+            status=status.HTTP_200_OK
+        )
+    except PlaceMenu.DoesNotExist:
+        return Response(
+            {"detail": "Menu item not found."},
+            status=status.HTTP_404_NOT_FOUND
+        )
