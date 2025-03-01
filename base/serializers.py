@@ -1,4 +1,4 @@
-from base.models import Category, Tag, Place, PlaceImage, PlaceSocialMedia
+from base.models import *
 from rest_framework import serializers
 
 class RwandaLocationsSerializer(serializers.Serializer):
