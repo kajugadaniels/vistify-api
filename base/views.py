@@ -646,3 +646,29 @@ def getPlaceMenu(request, place_id):
             {"detail": "Place not found."},
             status=status.HTTP_404_NOT_FOUND
         )
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def addPlaceMenuItem(request, place_id):
+    """
+    Add a new food menu item to a specific Place.
+    """
+    data = request.data.copy()
+    data['place'] = place_id
+    serializer = PlaceMenuSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(
+            {
+                "detail": "Menu item added successfully.",
+                "data": serializer.data
+            },
+            status=status.HTTP_201_CREATED
+        )
+    return Response(
+        {
+            "detail": "Failed to add menu item.",
+            "errors": serializer.errors
+        },
+        status=status.HTTP_400_BAD_REQUEST
+    )
