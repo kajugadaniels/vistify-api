@@ -105,3 +105,9 @@ class PlaceSerializer(serializers.ModelSerializer):
         if tags:
             place.tags.set(tags)
         return place
+
+class PlaceMenuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PlaceMenu
+        fields = ['id', 'place', 'name', 'description', 'price', 'created_at']
+        read_only_fields = ['id', 'created_at']
