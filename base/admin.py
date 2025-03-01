@@ -27,6 +27,13 @@ class PlaceSocialMediaInline(admin.StackedInline):
     max_num = 1  # Prevents multiple social media records per place
 
 # -------------------
+# Place Menu Inline Admin
+# -------------------
+class PlaceMenuInline(admin.TabularInline):  # Or admin.StackedInline for vertical layout
+    model = PlaceMenu
+    extra = 1  # Allows adding one extra blank menu field
+
+# -------------------
 # Category Admin
 # -------------------
 @admin.register(Category)
@@ -55,7 +62,7 @@ class PlaceAdmin(admin.ModelAdmin):
     list_filter = ('category', 'province', 'district', 'created_at')
     prepopulated_fields = {'slug': ('name',)}
     filter_horizontal = ('tags',)  # Allows selecting multiple tags in a better UI
-    inlines = [PlaceImageInline, PlaceSocialMediaInline]  # Add images & social media directly
+    inlines = [PlaceImageInline, PlaceSocialMediaInline, PlaceMenuInline]  # Add images, social media & menu directly
 
 # -------------------
 # Place Image Admin
