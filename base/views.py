@@ -624,3 +624,25 @@ def deletePlaceSocialMedia(request, pk):
         },
         status=status.HTTP_204_NO_CONTENT
     )
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getPlaceMenu(request, place_id):
+    """
+    Retrieve all menu items for a specific Place.
+    """
+    try:
+        menu_items = PlaceMenu.objects.filter(place__id=place_id)
+        serializer = PlaceMenuSerializer(menu_items, many=True)
+        return Response(
+            {
+                "detail": f"Successfully retrieved {len(serializer.data)} menu items.",
+                "data": serializer.data
+            },
+            status=status.HTTP_200_OK
+        )
+    except Place.DoesNotExist:
+        return Response(
+            {"detail": "Place not found."},
+            status=status.HTTP_404_NOT_FOUND
+        )
