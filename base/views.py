@@ -726,3 +726,22 @@ def editPlaceMenuItem(request, pk):
         },
         status=status.HTTP_400_BAD_REQUEST
     )
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def deletePlaceMenuItem(request, pk):
+    """
+    Delete a menu item.
+    """
+    try:
+        menu_item = PlaceMenu.objects.get(pk=pk)
+        menu_item.delete()
+        return Response(
+            {"detail": "Menu item deleted successfully."},
+            status=status.HTTP_204_NO_CONTENT
+        )
+    except PlaceMenu.DoesNotExist:
+        return Response(
+            {"detail": "Menu item not found."},
+            status=status.HTTP_404_NOT_FOUND
+        )
