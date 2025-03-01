@@ -694,3 +694,35 @@ def menuItemDetails(request, pk):
             {"detail": "Menu item not found."},
             status=status.HTTP_404_NOT_FOUND
         )
+
+@api_view(['PUT', 'PATCH'])
+@permission_classes([IsAuthenticated])
+def editPlaceMenuItem(request, pk):
+    """
+    Update a menu item.
+    """
+    try:
+        menu_item = PlaceMenu.objects.get(pk=pk)
+    except PlaceMenu.DoesNotExist:
+        return Response(
+            {"detail": "Menu item not found."},
+            status=status.HTTP_404_NOT_FOUND
+        )
+    
+    serializer = PlaceMenuSerializer(menu_item, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(
+            {
+                "detail": "Menu item updated successfully.",
+                "data": serializer.data
+            },
+            status=status.HTTP_200_OK
+        )
+    return Response(
+        {
+            "detail": "Failed to update menu item.",
+            "errors": serializer.errors
+        },
+        status=status.HTTP_400_BAD_REQUEST
+    )
