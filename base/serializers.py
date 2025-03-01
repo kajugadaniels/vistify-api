@@ -59,10 +59,9 @@ class PlaceSerializer(serializers.ModelSerializer):
     category_detail = CategorySerializer(source='category', read_only=True)
     tags_detail = TagSerializer(source='tags', many=True, read_only=True)
     images = PlaceImageSerializer(read_only=True, many=True)
-    social_medias = PlaceSocialMediaSerializer(source='social_media', read_only=True)  # ✅ Retrieves social media
-    menu_items = PlaceMenuSerializer(source='menu_items', many=True, read_only=True)  # ✅ Retrieves menu items
+    social_medias = PlaceSocialMediaSerializer(source='social_media', read_only=True)
+    menu_items = PlaceMenuSerializer(many=True, read_only=True)  # ✅ FIXED: Removed `source` argument
 
-    # Writeable fields for creating/updating a Place
     category = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all(), write_only=True, required=False
     )
@@ -93,25 +92,7 @@ class PlaceSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
             'images',
-            'social_medias',  # ✅ Retrieves social media details
-            'menu_items',  # ✅ Retrieves menu items for each place
+            'social_medias',
+            'menu_items',  # ✅ FIXED: Now correctly retrieving place menu
         ]
         read_only_fields = ['slug', 'views', 'created_at', 'updated_at']
-
-    def create(self, validated_data):
-        # Extract writable fields
-        category = validated_data.pop('category', None)
-        tags = validated_data.pop('tags', [])
-
-        # Create the Place object without category and tags first
-        place = Place.objects.create(**validated_data)
-
-        # Set the category if provided
-        if category:
-            place.category = category
-        place.save()
-
-        # Associate tags if provided
-        if tags:
-            place.tags.set(tags)
-        return place
