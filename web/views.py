@@ -114,8 +114,12 @@ def getPlaces(request):
 @permission_classes([AllowAny])
 def placeDetails(request, pk):
     """
-    Retrieves detailed information for a specific Place along with its nested 
-    category, tags, images, and social media records.
+    Retrieves detailed information for a specific Place, including:
+    - Category
+    - Tags
+    - Images
+    - Social Media
+    - Menu Items (Food & Drinks)
     """
     try:
         place = Place.objects.get(pk=pk)
@@ -126,11 +130,21 @@ def placeDetails(request, pk):
             },
             status=status.HTTP_404_NOT_FOUND
         )
-    serializer = PlaceSerializer(place)
+
+    # Serialize place details
+    place_serializer = PlaceSerializer(place)
+
+    # Retrieve place's menu
+    menu_items = PlaceMenu.objects.filter(place=place).order_by('name')
+    menu_serializer = PlaceMenuSerializer(menu_items, many=True)
+
     return Response(
         {
             "detail": "Successfully retrieved comprehensive details for the selected Place.",
-            "data": serializer.data
+            "data": {
+                "place": place_serializer.data,
+                "menu": menu_serializer.data  # ✅ Now retrieving place menu items
+            }
         },
         status=status.HTTP_200_OK
     )

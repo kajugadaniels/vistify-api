@@ -53,8 +53,7 @@ class PlaceSocialMediaSerializer(serializers.ModelSerializer):
 class PlaceMenuSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlaceMenu
-        fields = ['id', 'name', 'description', 'price', 'created_at']
-        read_only_fields = ['id', 'created_at']
+        fields = ['id', 'name', 'description', 'price']
 
 class PlaceSerializer(serializers.ModelSerializer):
     category_detail = CategorySerializer(source='category', read_only=True)
