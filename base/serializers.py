@@ -50,11 +50,18 @@ class PlaceSocialMediaSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['id']
 
+class PlaceMenuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PlaceMenu
+        fields = ['id', 'name', 'description', 'price', 'created_at']
+        read_only_fields = ['id', 'created_at']
+
 class PlaceSerializer(serializers.ModelSerializer):
     category_detail = CategorySerializer(source='category', read_only=True)
     tags_detail = TagSerializer(source='tags', many=True, read_only=True)
     images = PlaceImageSerializer(read_only=True, many=True)
-    social_medias = PlaceSocialMediaSerializer(source='social_media', read_only=True)  # Fix: Use the related_name
+    social_medias = PlaceSocialMediaSerializer(source='social_media', read_only=True)  # ✅ Retrieves social media
+    menu_items = PlaceMenuSerializer(source='menu_items', many=True, read_only=True)  # ✅ Retrieves menu items
 
     # Writeable fields for creating/updating a Place
     category = serializers.PrimaryKeyRelatedField(
@@ -87,7 +94,8 @@ class PlaceSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
             'images',
-            'social_medias',  # ✅ Now correctly retrieving social media details
+            'social_medias',  # ✅ Retrieves social media details
+            'menu_items',  # ✅ Retrieves menu items for each place
         ]
         read_only_fields = ['slug', 'views', 'created_at', 'updated_at']
 
@@ -95,19 +103,16 @@ class PlaceSerializer(serializers.ModelSerializer):
         # Extract writable fields
         category = validated_data.pop('category', None)
         tags = validated_data.pop('tags', [])
+
         # Create the Place object without category and tags first
         place = Place.objects.create(**validated_data)
+
         # Set the category if provided
         if category:
             place.category = category
         place.save()
+
         # Associate tags if provided
         if tags:
             place.tags.set(tags)
         return place
-
-class PlaceMenuSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PlaceMenu
-        fields = ['id', 'place', 'name', 'description', 'price', 'created_at']
-        read_only_fields = ['id', 'created_at']
