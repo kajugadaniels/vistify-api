@@ -36,4 +36,10 @@ urlpatterns = [
     path('tag/<int:pk>/edit/', editTag, name='editTag'),
     path('tag/<int:pk>/delete/', deleteTag, name='deleteTag'),
 
+    path('place/<int:place_id>/menu/', getPlaceMenu, name='getPlaceMenu'),
+    path('place/<int:place_id>/menu/add/', addPlaceMenuItem, name='addPlaceMenuItem'),
+    path('menu/<int:pk>/', menuItemDetails, name='menuItemDetails'),
+    path('menu/<int:pk>/edit/', editPlaceMenuItem, name='editPlaceMenuItem'),
+    path('menu/<int:pk>/delete/', deletePlaceMenuItem, name='deletePlaceMenuItem'),
+
 ]  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
