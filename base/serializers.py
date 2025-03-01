@@ -51,12 +51,11 @@ class PlaceSocialMediaSerializer(serializers.ModelSerializer):
         read_only_fields = ['id']
 
 class PlaceSerializer(serializers.ModelSerializer):
-    # Nested read-only representations for response
     category_detail = CategorySerializer(source='category', read_only=True)
     tags_detail = TagSerializer(source='tags', many=True, read_only=True)
     images = PlaceImageSerializer(read_only=True, many=True)
-    social_medias = PlaceSocialMediaSerializer(read_only=True, many=True)
-    
+    social_medias = PlaceSocialMediaSerializer(source='social_media', read_only=True)  # Fix: Use the related_name
+
     # Writeable fields for creating/updating a Place
     category = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all(), write_only=True, required=False
@@ -64,7 +63,7 @@ class PlaceSerializer(serializers.ModelSerializer):
     tags = serializers.PrimaryKeyRelatedField(
         queryset=Tag.objects.all(), many=True, write_only=True, required=False
     )
-    
+
     class Meta:
         model = Place
         fields = [
@@ -88,10 +87,10 @@ class PlaceSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
             'images',
-            'social_medias',
+            'social_medias',  # ✅ Now correctly retrieving social media details
         ]
         read_only_fields = ['slug', 'views', 'created_at', 'updated_at']
-    
+
     def create(self, validated_data):
         # Extract writable fields
         category = validated_data.pop('category', None)
