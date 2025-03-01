@@ -60,25 +60,25 @@ class PlaceAdmin(admin.ModelAdmin):
 # -------------------
 # Place Image Admin
 # -------------------
-@admin.register(PlaceImage)
-class PlaceImageAdmin(admin.ModelAdmin):
-    list_display = ('image_preview', 'place', 'caption', 'created_at')
-    search_fields = ('place__name', 'caption')
-    readonly_fields = ('image_preview',)
+# @admin.register(PlaceImage)
+# class PlaceImageAdmin(admin.ModelAdmin):
+#     list_display = ('image_preview', 'place', 'caption', 'created_at')
+#     search_fields = ('place__name', 'caption')
+#     readonly_fields = ('image_preview',)
 
-    def image_preview(self, obj):
-        """Display a small thumbnail preview of the image in the admin panel."""
-        if obj.image:
-            return format_html('<img src="{}" width="100" height="60" style="border-radius:5px;" />', obj.image.url)
-        return "No Image"
+#     def image_preview(self, obj):
+#         """Display a small thumbnail preview of the image in the admin panel."""
+#         if obj.image:
+#             return format_html('<img src="{}" width="100" height="60" style="border-radius:5px;" />', obj.image.url)
+#         return "No Image"
 
-    image_preview.short_description = "Image Preview"
+#     image_preview.short_description = "Image Preview"
 
-# -------------------
-# Place Social Media Admin
-# -------------------
-@admin.register(PlaceSocialMedia)
-class PlaceSocialMediaAdmin(admin.ModelAdmin):
-    list_display = ('place', 'phone_number', 'email', 'instagram', 'twitter', 'facebook')
-    search_fields = ('place__name', 'phone_number', 'email', 'instagram', 'twitter', 'facebook')
-    list_filter = ('place',)
+# # -------------------
+# # Place Social Media Admin
+# # -------------------
+# @admin.register(PlaceSocialMedia)
+# class PlaceSocialMediaAdmin(admin.ModelAdmin):
+#     list_display = ('place', 'phone_number', 'email', 'instagram', 'twitter', 'facebook')
+#     search_fields = ('place__name', 'phone_number', 'email', 'instagram', 'twitter', 'facebook')
+#     list_filter = ('place',)

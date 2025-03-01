@@ -189,3 +189,35 @@ CORS_ALLOW_HEADERS = [
     'authorization',
     'content-type'
 ]
+
+JAZZMIN_SETTINGS = {
+    "site_title": "CAPS",
+    "site_header": "CAPS",
+    "site_brand": "CAPS",
+    "welcome_sign": "Welcome Admin",
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "order_with_respect_to": ["auth", "books", "books.author", "books.book"],
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+    },
+    "custom_css": "jazzmin.css",
+    "custom_js": None,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": True,
+    "sidebar_fixed": True,
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": True,
+    "sidebar_nav_flat_style": False,
+    "theme": "simplex",
+    "show_ui_builder": True,
+    "changeform_format": "horizontal_tabs",
+    "changeform_format_overrides": {"auth.user": "collapsible", "auth.group": "vertical_tabs"},
+    "related_modal_active": False,
+}
